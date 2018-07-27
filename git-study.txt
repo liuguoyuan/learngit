@@ -1,0 +1,79 @@
+1、git初始化前的准备
+
+设置用户信息
+	git config --global user.name "Your Name"
+	git config --global user.email "email@example.com"
+用于之后git操作的用户记录，不设置不可以进行仓库管理
+
+2、git初始化操作
+
+创建版本库： git init
+将文件加入到暂存区： git add file
+查看工作区状态： git status
+查看修改内容： git diff
+将文件上传到仓库： git commit -m <版本说明>
+
+3、git版本操作
+
+查看文件内容： cat file
+查看版本提交日志： git log
+查看命令历史： git reflog
+版本回退： git reset --hard HEAD^
+	用HEAD表示当前版本，也就是最新的提交1094adb...（注意我的提交ID和你的肯定不一样），上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100
+丢弃工作区的修改： git checkout -- file
+删除文件： git rm file
+
+4、git分支操作
+
+查看分支：git branch
+创建分支：git branch <name>
+切换分支：git checkout <name>
+创建+切换分支：git checkout -b <name>
+合并某分支到当前分支：git merge <name> 
+                    --no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并	
+删除分支：git branch -d <name>
+看到分支合并图：git log --graph
+暂时储存当前工作现场：git stash
+查看stash内容：git stash list
+恢复当前工作现场：git stash apply
+删除stash中的工作现场：git stash drop
+恢复之前的工作现场并删除stash中的工作现场：git stash pop
+强行删除还未合并的分支：git branch -D <name>
+
+5、远程仓库操作
+	1>添加远程仓库
+		git remote add 远程库名字 git@git.com:github用户名/项目名.git
+	2>将本地项目推送到远程库
+		git push -u 远程库名字 master
+	3>从远程库克隆版本库
+		git clone git@github.com:用户名/版本库名字.git
+	4>查看远程库详细信息
+		git remote -v
+	本地新建的分支如果不推送到远程，对其他人就是不可见的；
+
+	从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+
+	在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+
+	建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+
+	从远程抓取分支，使用git pull，如果有冲突，要先处理冲突
+6、标签管理
+	创建标签： git tag 版本号 commit的ID
+	查看所有标签： git tag
+	查看标签信息： git show 标签名
+
+    命令git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+    命令git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+    命令git tag可以查看所有标签。
+    命令git push origin <tagname>可以推送一个本地标签；
+	命令git push origin --tags可以推送全部未推送过的本地标签；
+	命令git tag -d <tagname>可以删除一个本地标签；
+	命令git push origin :refs/tags/<tagname>可以删除一个远程标签
+	删除标签： git tag -d v0.1
+	删除远程库标签：git push origin :refs/tags/v0.9
+
+7、 问题master -> master (non-fast-forward)
+	git push --force origin master
+	问题fatal: refusing to merge unrelated histories
+	git pull origin master --allow-unrelated-histories
